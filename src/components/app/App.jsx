@@ -58,6 +58,7 @@ export class App extends Component {
         textSearch: value,
         photos: [],
         page: 1,
+        endPhotos: false,
       });
     }
   };
