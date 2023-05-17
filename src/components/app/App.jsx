@@ -4,6 +4,7 @@ import { ImageGallery } from 'components/imageGallery';
 import { Searchbar } from 'components/searchbar';
 import { Button } from 'components/button';
 import { Loader } from 'components/loader';
+import { Error } from 'components/error';
 import { FetchFotos, per_page } from '../../servises/FetchFotos';
 import css from './App.module.css';
 
@@ -73,7 +74,7 @@ export class App extends Component {
     return (
       <div className={css.App}>
         <Searchbar onSearch={this.handleSubmit} />
-        {error && <h2>{error}</h2>}
+        {error && <Error error={error} />}
 
         {loading && <Loader />}
         {photos.length > 0 && <ImageGallery photos={photos} />}
