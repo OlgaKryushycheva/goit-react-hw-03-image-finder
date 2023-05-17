@@ -20,8 +20,7 @@ export class Searchbar extends Component {
     const { value } = this.state;
 
     if (!value.trim()) {
-      toast.error('Please enter your request');
-      return;
+      return toast.error('Please enter your request');
     }
 
     this.props.onSearch(value);

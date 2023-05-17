@@ -26,20 +26,19 @@ export class App extends Component {
 
       FetchFotos(textSearch, page)
         .then(responce => {
+          if (responce.hits.length === 0) {
+            return toast.error(`There is no photos with ${textSearch}`);
+          }
+
           this.setState({
             photos: [...photos, ...responce.hits],
           });
 
           const totalHits = per_page * page;
-
           if (responce.totalHits <= totalHits) {
             this.setState({
               endPhotos: true,
             });
-          }
-
-          if (responce.hits.length === 0) {
-            toast.error(`There is no photos with ${textSearch}`);
           }
         })
         .catch(error => {
@@ -74,13 +73,17 @@ export class App extends Component {
     return (
       <div className={css.App}>
         <Searchbar onSearch={this.handleSubmit} />
+
         {error && <Error error={error} />}
 
         {loading && <Loader />}
+
         {photos.length > 0 && <ImageGallery photos={photos} />}
+
         {photos.length > 0 && !endPhotos && (
           <Button onClick={this.handleLoadMore} />
         )}
+
         <Toaster
           position="top-right"
           toastOptions={{
