@@ -32,14 +32,19 @@ export class App extends Component {
 
           this.setState({
             photos: [...photos, ...responce.hits],
+            endPhotos: responce.totalHits <= per_page * page,
           });
 
-          const totalHits = per_page * page;
-          if (responce.totalHits <= totalHits) {
-            this.setState({
-              endPhotos: true,
-            });
-          }
+          // this.setState({
+          //   photos: [...photos, ...responce.hits],
+          // });
+
+          // const totalHits = per_page * page;
+          // if (responce.totalHits <= totalHits) {
+          //   this.setState({
+          //     endPhotos: true,
+          //   });
+          // }
         })
         .catch(error => {
           this.setState({
