@@ -5,7 +5,7 @@ import { Searchbar } from 'components/searchbar';
 import { Button } from 'components/button';
 import { Loader } from 'components/loader';
 import { Error } from 'components/error';
-import { FetchFotos, per_page } from '../../servises/FetchFotos';
+import { fetchFotos, PER_PAGE } from '../../servises/FetchFotos';
 import css from './App.module.css';
 
 export class App extends Component {
@@ -18,42 +18,30 @@ export class App extends Component {
     endPhotos: false,
   };
 
-  componentDidUpdate = (_, prevState) => {
+  componentDidUpdate = async (_, prevState) => {
     const { textSearch, page, photos } = this.state;
 
     if (prevState.textSearch !== textSearch || prevState.page !== page) {
-      this.setState({ loading: true });
+      try {
+        this.setState({ loading: true });
 
-      FetchFotos(textSearch, page)
-        .then(responce => {
+        fetchFotos(textSearch, page).then(responce => {
           if (responce.hits.length === 0) {
             return toast.error(`There is no photos with ${textSearch}`);
           }
 
           this.setState({
             photos: [...photos, ...responce.hits],
-            endPhotos: responce.totalHits <= per_page * page,
+            endPhotos: responce.totalHits <= PER_PAGE * page,
           });
-
-          // this.setState({
-          //   photos: [...photos, ...responce.hits],
-          // });
-
-          // const totalHits = per_page * page;
-          // if (responce.totalHits <= totalHits) {
-          //   this.setState({
-          //     endPhotos: true,
-          //   });
-          // }
-        })
-        .catch(error => {
-          this.setState({
-            error: error.message,
-          });
-        })
-        .finally(() => {
-          this.setState({ loading: false });
         });
+      } catch (error) {
+        this.setState({
+          error: error.message,
+        });
+      } finally {
+        this.setState({ loading: false });
+      }
     }
   };
 
